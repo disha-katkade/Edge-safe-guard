@@ -154,6 +154,8 @@ A structured iterative cycle was followed to refine the model:
 A detailed description, dataset insights, experiments, and deployed model are available here:
 (https://studio.edgeimpulse.com/public/793380/live)
 
+🔗Demo - https://youtu.be/l22_fo1F1R4
+
 #**License**
 
 - This project uses publicly available datasets under permissive open-source licensing.
