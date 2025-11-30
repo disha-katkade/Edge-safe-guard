@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edge Safe Guard – Real-time Detection</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        video, canvas {
+            border: 2px solid black;
+            margin: 10px;
+        }
+        #output {
+            font-size: 16px;
+            font-weight: bold;
+            max-width: 800px;
+            word-break: break-word;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Edge Safe Guard – Real-time Safety Helmet Detection</h2>
+
+<video id="video" autoplay></video>
+<canvas id="canvas"></canvas>
+<div id="output">Loading model...</div>
+
+<script type="module">
+import * as ei from './edge-impulse-standalone.js';  // ✔ Make sure this is in the folder
+let video = document.getElementById('video');
+let canvas = document.getElementById('canvas');
+let ctx = canvas.getContext('2d');
+
+// Set canvas size
+canvas.width = 640;
+canvas.height = 480;
+video.width = 640;
+video.height = 480;
+
+async function setupCamera() {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+    video.srcObject = stream;
+    return new Promise(resolve => {
+        video.onloadedmetadata = () => resolve();
+    });
+}
+
+async function run() {
+    await setupCamera();
+    document.getElementById('output').innerHTML = "Loading model…";
+
+    // Load the .eim model
+    const runner = await ei.EI_CLASSIFIER.load('model.eim');
+    document.getElementById('output').innerHTML = "Model loaded. Starting detection…";
+
+    async function loop() {
+        // Draw video to canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // Run classification
+        const { result } = await runner.classify(imageData);
+
+        // Clear and redraw
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Draw bounding boxes if predictions exist
+        if (result.predictions && result.predictions.length > 0) {
+            result.predictions.forEach(pred => {
+                const { x, y, width, height } = pred.boundingBox;
+                const label = pred.label;
+                const confidence = (pred.confidence * 100).toFixed(1);
+
+                const bx = x * canvas.width;
+                const by = y * canvas.height;
+                const bw = width * canvas.width;
+                const bh = height * canvas.height;
+
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(bx, by, bw, bh);
+
+                ctx.fillStyle = 'red';
+                ctx.font = '20px Arial';
+                ctx.fillText(`${label} ${confidence}%`, bx, by > 20 ? by - 5 : by + 20);
+            });
+        }
+
+        // Show JSON results
+        document.getElementById('output').innerHTML = JSON.stringify(result, null, 2);
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+}
+
+run();
+</script>
+</body>
+</html>
