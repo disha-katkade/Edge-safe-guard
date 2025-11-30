@@ -152,9 +152,7 @@ A structured iterative cycle was followed to refine the model:
 ## **Edge Impulse Public Project**
 
 A detailed description, dataset insights, experiments, and deployed model are available here:
-
-(Insert your public project link once you publish it)
-https://studio.edgeimpulse.com/public/<YOUR_PROJECT_ID>
+(https://studio.edgeimpulse.com/public/793380/live)
 
 #**License**
 
