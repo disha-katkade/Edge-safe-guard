@@ -27,7 +27,7 @@ The current prototype achieves ~40% accuracy due to dataset imbalance and limite
 | Feature | Details |
 |---------|---------|
 | **📂 Dataset Source** | `Helmet Safety` — COCO Format *(Open-source)* |
-| **🖼️ Total Images** | `~11,000` |
+| **🖼️ Total Images** | `~1400` |
 | **🏷️ Annotations** | Helmet / No-Helmet |
 | **⚙️ Preprocessing** | Resizing → Normalization → COCO → Edge Impulse ingestion |
 | **📊 Split Ratio** | `80% Train / 20% Validation` |
