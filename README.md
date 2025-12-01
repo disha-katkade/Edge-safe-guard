@@ -45,10 +45,12 @@ This variability was critical for generalization but also introduced class imbal
 
 | Feature | Details |
 |---------|---------|
-| **🖼️ Feature Block** | Image (`96x96`, Grayscale & RGB tested) |
+| **🖼️ Feature Block** | Image (`320x320`, Grayscale & RGB tested) |
 | **⚙️ Training Block** | Transfer Learning — `MobileNetV2-0.35` |
-| **🔧 Optimization** | Quantized `INT8` |
+| **🔧 Quantization** | Quantized `INT8` |
 | **🚀 Deployment** | WebAssembly (Browser SIMD) |
+| **⚙️Optimizer** | Adam |
+
 
 Why MobileNetV2-0.35?
 - small footprint
@@ -89,7 +91,7 @@ A structured iterative cycle was followed to refine the model:
 | EfficientLite       | Slow on browser WASM     | Rejected     |
 
 #### ✔ Final Optimized Model
-- **Input:** 96×96  
+- **Input:** 320×320  
 - **Quantization:** INT8  
 - **Latency (Browser SIMD):** ~27ms  
 - **Accuracy:** 40.1%  
@@ -147,7 +149,12 @@ A structured iterative cycle was followed to refine the model:
     - `logs, trials, confusion matrices`
   - `deployment/`
     - `webassembly-browser-simd/`
+  - `docs/`
+    - `report`
+    - `model training doc`
+    - `technical doc`
   - `README.md`
+    
 
 ## **Edge Impulse Public Project**
 
